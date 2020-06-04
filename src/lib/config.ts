@@ -453,6 +453,14 @@ export class default_config {
          * Commands that will be run when fullscreen state is left.
          */
         FullscreenLeft: {},
+
+        BeforeRequest: {
+            "https://www.amazon.co.uk/*": `() => {
+                console.log("I ran")
+                return {redirectUrl: "https://news.bbc.co.uk"}
+                // return {redirectUrl: "https://smile.amazon.co.uk"}
+            }`
+        },
     }
 
     /**
