@@ -138,6 +138,31 @@ browser.tabs.onActivated.addListener(ev => {
         .catch(ignore)
 })
 
+// Valid events listed here: https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/API/webRequest#Events
+for (const requestEvent of [
+    "AuthRequired",
+    "BeforeRedirect",
+    "BeforeRequest",
+    "BeforeSendHeaders",
+    "Completed",
+    "ErrorOccured",
+    "HeadersReceived",
+    "ResponseStarted",
+    "SendHeaders",
+]) {
+    config.getAsync("autocmds", requestEvent).then(aucmds => {
+        if (!aucmds) return
+        const patterns = Object.keys(aucmds)
+        for (const pattern of patterns) {
+            browser.webRequest["on" + requestEvent].addListener(
+                eval(aucmds[pattern]),
+                {urls: [pattern]},
+                ["blocking", "requestBody"],
+            )
+        }
+    })
+}
+
 // }}}
 
 // {{{ AUTOCONTAINERS
