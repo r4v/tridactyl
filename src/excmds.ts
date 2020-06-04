@@ -3406,10 +3406,12 @@ export function set(key: string, ...values: string[]) {
 
 /** @hidden */
 //#background_helper
-const AUCMDS = ["DocStart", "DocLoad", "DocEnd", "TriStart", "TabEnter", "TabLeft", "FullscreenChange", "FullscreenEnter", "FullscreenLeft"]
+const AUCMDS = ["DocStart", "DocLoad", "DocEnd", "TriStart", "TabEnter", "TabLeft", "FullscreenChange", "FullscreenEnter", "FullscreenLeft", "AuthRequired", "BeforeRedirect", "BeforeRequest", "BeforeSendHeaders", "Completed", "ErrorOccured", "HeadersReceived", "ResponseStarted", "SendHeaders"]
 /** Set autocmds to run when certain events happen.
 
- @param event Curently, 'TriStart', 'DocStart', 'DocLoad', 'DocEnd', 'TabEnter', 'TabLeft', 'FullscreenChange', 'FullscreenEnter', and 'FullscreenLeft' are supported
+ @param event Curently, 'TriStart', 'DocStart', 'DocLoad', 'DocEnd', 'TabEnter', 'TabLeft', 'FullscreenChange', 'FullscreenEnter', 'FullscreenLeft', 'AuthRequired', 'BeforeRedirect', 'BeforeRequest', 'BeforeSendHeaders', 'Completed', 'ErrorOccured', 'HeadersReceived', 'ResponseStarted', and 'SendHeaders' are supported
+
+ NB: New 'AuthRequired', 'BeforeRedirect', 'BeforeRequest', 'BeforeSendHeaders', 'Completed', 'ErrorOccured', 'HeadersReceived', 'ResponseStarted', and 'SendHeaders' auto commands currently require a browser restart to be enabled.
 
  @param url For DocStart, DocEnd, TabEnter, and TabLeft: a JavaScript regex (e.g. `www\.amazon\.co.*\`)
 
@@ -3420,7 +3422,9 @@ const AUCMDS = ["DocStart", "DocLoad", "DocEnd", "TriStart", "TabEnter", "TabLef
  installed, except for the ".*" regular expression which will always be
  triggered, even without the native messenger.
 
- @param excmd The excmd to run (use [[composite]] to run multiple commands)
+ For AuthRequired, BeforeRedirect, BeforeRequest, BeforeSendHeaders, Completed, ErrorOccured, HeadersReceived, ResponseStarted and SendHeaders, a [URL match pattern](https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/Match_patterns)
+
+ @param excmd The excmd to run (use [[composite]] to run multiple commands), __except__ for AuthRequired, BeforeRedirect, BeforeRequest, BeforeSendHeaders, Completed, ErrorOccured, HeadersReceived, ResponseStarted and SendHeaders, events where it must be an inline JavaScript function which maps [details objects specific to the event](https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/API/webRequest#Events) to [blocking responses](https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/API/webRequest/BlockingResponse). This JavaScript function will run in the background context.
 
 */
 //#background
