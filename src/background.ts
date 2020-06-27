@@ -87,7 +87,7 @@ browser.webNavigation.onDOMContentLoaded.addListener(() => {
 // Prevent Tridactyl from being updated while it is running in the hope of fixing #290
 browser.runtime.onUpdateAvailable.addListener(_ => undefined)
 
-browser.runtime.onStartup.addListener(_ => {
+browser.runtime.onStartup.addListener(() => {
     config.getAsync("autocmds", "TriStart").then(aucmds => {
         const hosts = Object.keys(aucmds)
         // If there's only one rule and it's "all", no need to check the hostname
@@ -96,7 +96,7 @@ browser.runtime.onStartup.addListener(_ => {
         } else {
             native.run("hostname").then(hostname => {
                 for (const host of hosts) {
-                    if ((new RegExp(host)).exec(hostname.content)) {
+                    if (new RegExp(host).exec(hostname.content)) {
                         controller.acceptExCmd(aucmds[host])
                     }
                 }
